@@ -30,9 +30,9 @@
     </div>
 </div>
 
-<div id="orderModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="hideOrderForm()">&times;</span>
+<div id="orderModal" class="order-modal">
+    <div class="order-modal-content">
+        <button class="close-btn" onclick="hideOrderForm()">&times;</button>
         <h2>Оформление заказа</h2>
         <form method="POST" action="{{ url_for('order_product', product_id=product.id) }}">
             <div class="form-group">
@@ -129,7 +129,7 @@
         }
     }
 
-    .modal {
+    .order-modal {
         display: none;
         position: fixed;
         top: 0;
@@ -138,37 +138,54 @@
         height: 100%;
         background: rgba(0,0,0,0.5);
         z-index: 1000;
+        align-items: center;
+        justify-content: center;
     }
 
-    .modal-content {
+    .order-modal.show {
+        display: flex;
+    }
+
+    .order-modal-content {
         position: relative;
         background: white;
-        margin: 15% auto;
-        padding: 20px;
+        padding: 30px;
         width: 90%;
         max-width: 500px;
         border-radius: 10px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        margin: 20px;
     }
 
-    .close {
+    .order-modal .close-btn {
         position: absolute;
-        right: 20px;
-        top: 10px;
-        font-size: 28px;
+        right: 15px;
+        top: 15px;
+        font-size: 24px;
         cursor: pointer;
         color: #666;
+        background: none;
+        border: none;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
     }
 
-    .close:hover {
+    .order-modal .close-btn:hover {
+        background: #f0f0f0;
         color: #000;
     }
 
-    .form-group {
+    .order-modal .form-group {
         margin-bottom: 20px;
     }
 
-    .form-group input {
+    .order-modal .form-group input {
         width: 100%;
         padding: 12px;
         border: 1px solid #ddd;
@@ -177,7 +194,7 @@
         box-sizing: border-box;
     }
 
-    .submit-btn {
+    .order-modal .submit-btn {
         width: 100%;
         padding: 12px;
         background: var(--color-primary);
@@ -189,7 +206,7 @@
         transition: background-color 0.3s ease;
     }
 
-    .submit-btn:hover {
+    .order-modal .submit-btn:hover {
         background: #8b4513;
     }
 
@@ -226,24 +243,43 @@
             padding: 12px 20px;
             font-size: 16px;
         }
+        .order-modal-content {
+            padding: 20px;
+            margin: 10px;
+        }
+        
+        .order-modal .close-btn {
+            right: 10px;
+            top: 10px;
+            font-size: 20px;
+        }
     }
 </style>
 
 <script>
 function showOrderForm() {
-    document.getElementById('orderModal').style.display = 'block';
+    document.getElementById('orderModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
 }
 
 function hideOrderForm() {
-    document.getElementById('orderModal').style.display = 'none';
+    document.getElementById('orderModal').classList.remove('show');
+    document.body.style.overflow = 'auto';
 }
 
 // Закрытие модального окна при клике вне его области
 window.onclick = function(event) {
     var modal = document.getElementById('orderModal');
     if (event.target == modal) {
-        modal.style.display = 'none';
+        hideOrderForm();
     }
 }
+
+// Закрытие модального окна по клавише Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        hideOrderForm();
+    }
+});
 </script>
 {% endblock %} 
