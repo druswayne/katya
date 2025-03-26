@@ -338,14 +338,22 @@ def order_product(product_id):
     name = request.form.get('name')
     email = request.form.get('email')
     phone = request.form.get('phone')
+    comment = request.form.get('comment')
     
-    if not all([name, email, phone]):
-        flash('Пожалуйста, заполните все поля')
+    if not all([name, phone]):
+        flash('Пожалуйста, заполните все обязательные поля')
         return redirect(url_for('product_details', id=product_id))
     
     try:
-        message = f"Заказ товара:\nНазвание: {product.title}\nКатегория: {product.category.title}\nЦена: {product.price} руб.\n\nДанные заказчика:\nИмя: {name}\nEmail: {email}\nТелефон: {phone}"
-        new_message = Message(name=name, email=email, phone=phone, message=message)
+        message = f"Заказ товара:\nНазвание: {product.title}\nКатегория: {product.category.title}\nЦена: {product.price} BYN\n\nДанные заказчика:\nИмя: {name}\nТелефон: {phone}"
+        
+        if email:
+            message += f"\nEmail: {email}"
+            
+        if comment:
+            message += f"\n\nКомментарий к заказу:\n{comment}"
+            
+        new_message = Message(name=name, email=email or "Не указан", phone=phone, message=message)
         db.session.add(new_message)
         db.session.commit()
         flash('Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.')
