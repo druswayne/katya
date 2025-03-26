@@ -16,15 +16,19 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: 'Times New Roman', serif;
+    font-family: 'TTCommons', sans-serif;
     line-height: 1.6;
     color: var(--color-text);
     background-color: var(--color-light);
 }
 
 h1, h2, h3, h4 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'TTCommons', sans-serif;
     margin-bottom: 1.5rem;
     color: var(--color-primary);
 }
@@ -124,7 +128,12 @@ nav {
     margin-top: 0;
 }
 
+.hero-content {
+    font-family: 'TTCommons', sans-serif;
+}
+
 .hero p {
+    font-family: 'TTCommons', sans-serif;
     font-size: 1.3rem;
     margin-bottom: 2rem;
     max-width: 800px;
