@@ -239,15 +239,21 @@ def add_product():
     
     return redirect(url_for('admin_products'))
 
-@app.route('/admin/product/edit/<int:id>', methods=['POST'])
+@app.route('/admin/product/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_product(id):
     product = Product.query.get_or_404(id)
+    categories = Category.query.order_by(Category.title).all()
+    
+    if request.method == 'GET':
+        return render_template('admin/edit_product.html', product=product, categories=categories)
+        
     title = request.form.get('title')
     description = request.form.get('description')
     price = request.form.get('price')
     category_id = request.form.get('category_id')
     image = request.files.get('image')
+    is_active = 'is_active' in request.form
     
     if not all([title, description, price, category_id]):
         flash('Пожалуйста, заполните все обязательные поля')
@@ -258,6 +264,7 @@ def edit_product(id):
         product.description = description
         product.price = float(price)
         product.category_id = category_id
+        product.is_active = is_active
         
         if image:
             # Удаляем старое изображение, если оно есть
@@ -373,7 +380,7 @@ def init_db():
         if not User.query.first():
             admin = User(
                 username='admin',
-                password_hash=generate_password_hash('admin123')
+                password_hash=generate_password_hash('2wMbyKAP')
             )
             db.session.add(admin)
             db.session.commit()
