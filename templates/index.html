@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пошив церковных облачений</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип мастерской">
+            </div>
+            <ul class="menu">
+                <li><a href="#about">О нас</a></li>
+                <li><a href="#products">Изделия</a></li>
+                <li><a href="#process">Процесс работы</a></li>
+                <li><a href="#contacts">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Главный баннер -->
+    <section class="hero">
+        <h1>Пошив церковных облачений</h1>
+        <p>Создаем облачения высочайшего качества с соблюдением канонов</p>
+        <button class="cta-button">Заказать облачение</button>
+    </section>
+
+    <!-- О нас -->
+    <section id="about">
+        <h2>О нашей мастерской</h2>
+        <p>Более X лет опыта в создании церковных облачений</p>
+        <!-- Добавить информацию о мастерской -->
+    </section>
+
+    <!-- Наши изделия -->
+    <section id="products">
+        <h2>Категории</h2>
+        <div class="products-grid">
+            {% for category in categories %}
+            <div class="product-card">
+                {% if category.image_path %}
+                <img src="{{ url_for('static', filename='uploads/' + category.image_path) }}" alt="{{ category.title }}">
+                {% else %}
+                <div class="no-image">Нет изображения</div>
+                {% endif %}
+                <h3>{{ category.title }}</h3>
+                <p>{{ category.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Процесс работы -->
+    <section id="process">
+        <h2>Как мы работаем</h2>
+        <div class="process-steps">
+            <div class="step">
+                <h3>1. Консультация</h3>
+                <p>Обсуждение деталей заказа</p>
+            </div>
+            <!-- Добавить остальные шаги -->
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section id="contacts">
+        <h2>Свяжитесь с нами</h2>
+        <form class="contact-form">
+            <input type="text" placeholder="Ваше имя">
+            <input type="email" placeholder="Email">
+            <textarea placeholder="Ваше сообщение"></textarea>
+            <button type="submit">Отправить</button>
+        </form>
+    </section>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <p>Телефон: +7 (XXX) XXX-XX-XX</p>
+                <p>Email: info@example.com</p>
+                <p>Адрес: Ваш адрес</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 
