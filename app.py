@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from datetime import datetime
+import uuid
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')
@@ -96,62 +97,86 @@ def admin_products():
     products = Product.query.order_by(Product.created_at.desc()).all()
     return render_template('admin/products.html', categories=categories, products=products)
 
+def generate_unique_filename(original_filename):
+    """Генерирует уникальное имя файла"""
+    # Получаем расширение файла
+    ext = os.path.splitext(original_filename)[1].lower()
+    # Генерируем уникальное имя с помощью UUID и временной метки
+    unique_filename = f"{uuid.uuid4()}_{datetime.now().strftime('%Y%m%d_%H%M%S')}{ext}"
+    return unique_filename
+
 @app.route('/admin/category/add', methods=['GET', 'POST'])
 @login_required
 def add_category():
-    if request.method == 'POST':
-        title = request.form.get('title')
-        description = request.form.get('description')
-        image = request.files.get('image')
+    if request.method == 'GET':
+        return render_template('admin/add_category.html')
+        
+    title = request.form.get('title')
+    description = request.form.get('description')
+    image = request.files.get('image')
+    
+    if not title:
+        flash('Название категории обязательно')
+        return redirect(url_for('admin_categories'))
+    
+    try:
+        new_category = Category(title=title, description=description)
+        db.session.add(new_category)
+        db.session.commit()
         
         if image:
-            filename = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{image.filename}"
-            # Сохраняем только имя файла, без папки uploads
-            image_path = filename
-            # Сохраняем файл в папку uploads
+            # Генерируем уникальное имя файла
+            filename = generate_unique_filename(image.filename)
+            # Сохраняем файл
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        else:
-            image_path = None
-            
-        category = Category(
-            title=title,
-            description=description,
-            image_path=image_path
-        )
-        db.session.add(category)
-        db.session.commit()
+            # Обновляем путь к изображению в базе данных
+            new_category.image_path = filename
+            db.session.commit()
+        
         flash('Категория успешно добавлена')
-        return redirect(url_for('admin_categories'))
-    return render_template('admin/add_category.html')
+    except Exception as e:
+        db.session.rollback()
+        flash('Произошла ошибка при добавлении категории')
+    
+    return redirect(url_for('admin_categories'))
 
-@app.route('/admin/category/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/admin/category/edit/<int:id>', methods=['POST'])
 @login_required
 def edit_category(id):
     category = Category.query.get_or_404(id)
-    if request.method == 'POST':
-        category.title = request.form.get('title')
-        category.description = request.form.get('description')
-        image = request.files.get('image')
+    title = request.form.get('title')
+    description = request.form.get('description')
+    image = request.files.get('image')
+    
+    if not title:
+        flash('Название категории обязательно')
+        return redirect(url_for('admin_categories'))
+    
+    try:
+        category.title = title
+        category.description = description
         
         if image:
+            # Удаляем старое изображение, если оно есть
             if category.image_path:
-                try:
-                    old_image_path = os.path.join(app.config['UPLOAD_FOLDER'], category.image_path)
-                    if os.path.exists(old_image_path):
-                        os.remove(old_image_path)
-                except:
-                    pass
+                old_image_path = os.path.join(app.config['UPLOAD_FOLDER'], category.image_path)
+                if os.path.exists(old_image_path):
+                    os.remove(old_image_path)
             
-            filename = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{image.filename}"
-            # Сохраняем только имя файла
-            category.image_path = filename
-            # Сохраняем файл в папку uploads
+            # Генерируем уникальное имя файла
+            filename = generate_unique_filename(image.filename)
+            # Сохраняем новый файл
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            
+            # Обновляем путь к изображению в базе данных
+            category.image_path = filename
+        
         db.session.commit()
         flash('Категория успешно обновлена')
-        return redirect(url_for('admin_categories'))
-    return render_template('admin/edit_category.html', category=category)
+    except Exception as e:
+        db.session.rollback()
+        flash('Произошла ошибка при обновлении категории')
+    
+    return redirect(url_for('admin_categories'))
 
 @app.route('/admin/category/delete/<int:id>')
 @login_required
@@ -175,67 +200,86 @@ def category_products(id):
     products = Product.query.filter_by(category_id=id).order_by(Product.created_at.desc()).all()
     return render_template('category_products.html', category=category, products=products)
 
-@app.route('/admin/product/add', methods=['GET', 'POST'])
+@app.route('/admin/product/add', methods=['POST'])
 @login_required
 def add_product():
-    if request.method == 'POST':
-        title = request.form.get('title')
-        description = request.form.get('description')
-        price = float(request.form.get('price', 0))
-        category_id = int(request.form.get('category_id'))
-        image = request.files.get('image')
-        
-        if image:
-            filename = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{image.filename}"
-            image_path = filename
-            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        else:
-            image_path = None
-            
-        product = Product(
+    title = request.form.get('title')
+    description = request.form.get('description')
+    price = request.form.get('price')
+    category_id = request.form.get('category_id')
+    image = request.files.get('image')
+    
+    if not all([title, description, price, category_id]):
+        flash('Пожалуйста, заполните все обязательные поля')
+        return redirect(url_for('admin_products'))
+    
+    try:
+        new_product = Product(
             title=title,
             description=description,
-            price=price,
-            image_path=image_path,
+            price=float(price),
             category_id=category_id
         )
-        db.session.add(product)
+        db.session.add(new_product)
         db.session.commit()
+        
+        if image:
+            # Генерируем уникальное имя файла
+            filename = generate_unique_filename(image.filename)
+            # Сохраняем файл
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            # Обновляем путь к изображению в базе данных
+            new_product.image_path = filename
+            db.session.commit()
+        
         flash('Товар успешно добавлен')
-        return redirect(url_for('admin_products'))
+    except Exception as e:
+        db.session.rollback()
+        flash('Произошла ошибка при добавлении товара')
+    
     return redirect(url_for('admin_products'))
 
-@app.route('/admin/product/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/admin/product/edit/<int:id>', methods=['POST'])
 @login_required
 def edit_product(id):
     product = Product.query.get_or_404(id)
-    categories = Category.query.order_by(Category.title).all()
+    title = request.form.get('title')
+    description = request.form.get('description')
+    price = request.form.get('price')
+    category_id = request.form.get('category_id')
+    image = request.files.get('image')
     
-    if request.method == 'POST':
-        product.title = request.form.get('title')
-        product.description = request.form.get('description')
-        product.price = float(request.form.get('price', 0)) if request.form.get('price') else None
-        product.category_id = int(request.form.get('category_id'))
-        product.is_active = 'is_active' in request.form
-        image = request.files.get('image')
+    if not all([title, description, price, category_id]):
+        flash('Пожалуйста, заполните все обязательные поля')
+        return redirect(url_for('admin_products'))
+    
+    try:
+        product.title = title
+        product.description = description
+        product.price = float(price)
+        product.category_id = category_id
         
         if image:
+            # Удаляем старое изображение, если оно есть
             if product.image_path:
-                try:
-                    old_image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.image_path)
-                    if os.path.exists(old_image_path):
-                        os.remove(old_image_path)
-                except:
-                    pass
+                old_image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.image_path)
+                if os.path.exists(old_image_path):
+                    os.remove(old_image_path)
             
-            filename = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{image.filename}"
-            product.image_path = filename
+            # Генерируем уникальное имя файла
+            filename = generate_unique_filename(image.filename)
+            # Сохраняем новый файл
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            
+            # Обновляем путь к изображению в базе данных
+            product.image_path = filename
+        
         db.session.commit()
         flash('Товар успешно обновлен')
-        return redirect(url_for('admin_products'))
-    return render_template('admin/edit_product.html', product=product, categories=categories)
+    except Exception as e:
+        db.session.rollback()
+        flash('Произошла ошибка при обновлении товара')
+    
+    return redirect(url_for('admin_products'))
 
 @app.route('/admin/product/delete/<int:id>')
 @login_required

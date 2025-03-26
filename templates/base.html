@@ -53,6 +53,16 @@
                 <p>Телефон: +7 (XXX) XXX-XX-XX</p>
                 <p>Email: info@example.com</p>
                 <p>Адрес: Ваш адрес</p>
+                <div class="social-buttons">
+                    <a href="https://vk.com/your_page" target="_blank" class="social-btn vk">
+                        <i class="fab fa-vk"></i>
+                        ВКонтакте
+                    </a>
+                    <a href="https://www.instagram.com/your_page" target="_blank" class="social-btn instagram">
+                        <i class="fab fa-instagram"></i>
+                        Instagram
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
@@ -85,6 +95,72 @@
         main {
             margin-top: 80px;
             min-height: calc(100vh - 80px - 200px);
+        }
+
+        footer {
+            background: var(--color-primary);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .contact-info {
+            margin-bottom: 30px;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .social-btn i {
+            font-size: 18px;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .social-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-btn {
+                width: 100%;
+                max-width: 250px;
+                justify-content: center;
+            }
         }
     </style>
 </body>
