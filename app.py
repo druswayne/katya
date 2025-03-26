@@ -44,6 +44,7 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
+    phone = db.Column(db.String(20))
     message = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -262,30 +263,25 @@ def product_details(id):
 
 @app.route('/contact', methods=['POST'])
 def contact():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        email = request.form.get('email')
-        message = request.form.get('message')
-        
-        if not all([name, email, message]):
-            flash('Пожалуйста, заполните все поля формы')
-            return redirect(url_for('index', _anchor='contacts'))
-            
-        new_message = Message(
-            name=name,
-            email=email,
-            message=message
-        )
-        
-        try:
-            db.session.add(new_message)
-            db.session.commit()
-            flash('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.')
-        except Exception as e:
-            db.session.rollback()
-            flash('Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте позже.')
-            
+    name = request.form.get('name')
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+    message = request.form.get('message')
+    
+    if not all([name, email, message]):
+        flash('Пожалуйста, заполните все обязательные поля')
         return redirect(url_for('index', _anchor='contacts'))
+    
+    try:
+        new_message = Message(name=name, email=email, phone=phone, message=message)
+        db.session.add(new_message)
+        db.session.commit()
+        flash('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.')
+    except Exception as e:
+        db.session.rollback()
+        flash('Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте позже.')
+    
+    return redirect(url_for('index', _anchor='contacts'))
 
 @app.route('/admin/messages')
 @login_required
