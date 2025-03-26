@@ -140,10 +140,14 @@ def add_category():
     
     return redirect(url_for('admin_categories'))
 
-@app.route('/admin/category/edit/<int:id>', methods=['POST'])
+@app.route('/admin/category/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_category(id):
     category = Category.query.get_or_404(id)
+    
+    if request.method == 'GET':
+        return render_template('admin/edit_category.html', category=category)
+        
     title = request.form.get('title')
     description = request.form.get('description')
     image = request.files.get('image')
