@@ -186,16 +186,32 @@ def edit_category(id):
 @login_required
 def delete_category(id):
     category = Category.query.get_or_404(id)
-    if category.image_path:
-        try:
-            image_path = os.path.join(app.config['UPLOAD_FOLDER'], category.image_path)
-            if os.path.exists(image_path):
-                os.remove(image_path)
-        except:
-            pass
-    db.session.delete(category)
-    db.session.commit()
-    flash('Категория успешно удалена')
+    
+    try:
+        # Удаляем все товары в категории
+        products = Product.query.filter_by(category_id=id).all()
+        for product in products:
+            # Удаляем изображения товаров
+            if product.image_path:
+                product_image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.image_path)
+                if os.path.exists(product_image_path):
+                    os.remove(product_image_path)
+            db.session.delete(product)
+        
+        # Удаляем изображение категории
+        if category.image_path:
+            category_image_path = os.path.join(app.config['UPLOAD_FOLDER'], category.image_path)
+            if os.path.exists(category_image_path):
+                os.remove(category_image_path)
+        
+        # Удаляем категорию
+        db.session.delete(category)
+        db.session.commit()
+        flash('Категория и все связанные товары успешно удалены')
+    except Exception as e:
+        db.session.rollback()
+        flash('Произошла ошибка при удалении категории')
+    
     return redirect(url_for('admin_categories'))
 
 @app.route('/category/<int:id>')
