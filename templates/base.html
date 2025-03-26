@@ -15,18 +15,21 @@
                     <img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип мастерской">
                 </a>
             </div>
-            <ul class="menu">
-                <li><a href="{{ url_for('index') }}#about">О нас</a></li>
-                <li><a href="{{ url_for('index') }}#products">Изделия</a></li>
-                <li><a href="{{ url_for('index') }}#process">Процесс работы</a></li>
-                <li><a href="{{ url_for('index') }}#contacts">Контакты</a></li>
-                {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('admin_dashboard') }}">Панель управления</a></li>
-                <li><a href="{{ url_for('admin_logout') }}">Выйти</a></li>
-                {% else %}
-                <li><a href="{{ url_for('admin_login') }}">Войти</a></li>
-                {% endif %}
-            </ul>
+            <div class="nav-right">
+                <ul class="menu">
+                    <li><a href="{{ url_for('index') }}">Главная</a></li>
+                    <li><a href="{{ url_for('index') }}#about">О нас</a></li>
+                    <li><a href="{{ url_for('index') }}#products">Изделия</a></li>
+                    <li><a href="{{ url_for('index') }}#process">Процесс работы</a></li>
+                    <li><a href="{{ url_for('index') }}#contacts">Контакты</a></li>
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('admin_dashboard') }}">Панель управления</a></li>
+                    <li><a href="{{ url_for('admin_logout') }}">Выйти</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('admin_login') }}">Войти</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </nav>
     </header>
 
