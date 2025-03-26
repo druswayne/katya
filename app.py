@@ -40,6 +40,13 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
 
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -252,6 +259,48 @@ def product_details(id):
         flash('Товар временно недоступен')
         return redirect(url_for('category_products', id=product.category_id))
     return render_template('product_details.html', product=product)
+
+@app.route('/contact', methods=['POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        message = request.form.get('message')
+        
+        if not all([name, email, message]):
+            flash('Пожалуйста, заполните все поля формы')
+            return redirect(url_for('index', _anchor='contacts'))
+            
+        new_message = Message(
+            name=name,
+            email=email,
+            message=message
+        )
+        
+        try:
+            db.session.add(new_message)
+            db.session.commit()
+            flash('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.')
+        except Exception as e:
+            db.session.rollback()
+            flash('Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте позже.')
+            
+        return redirect(url_for('index', _anchor='contacts'))
+
+@app.route('/admin/messages')
+@login_required
+def admin_messages():
+    messages = Message.query.order_by(Message.created_at.desc()).all()
+    return render_template('admin/messages.html', messages=messages)
+
+@app.route('/admin/message/delete/<int:id>')
+@login_required
+def delete_message(id):
+    message = Message.query.get_or_404(id)
+    db.session.delete(message)
+    db.session.commit()
+    flash('Сообщение успешно удалено')
+    return redirect(url_for('admin_messages'))
 
 # Создание базы данных и администратора
 def init_db():

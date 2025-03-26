@@ -1,0 +1,121 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="admin-header">
+    <h1>Сообщения от пользователей</h1>
+    <a href="{{ url_for('admin_dashboard') }}" class="back-btn">← Назад в панель управления</a>
+</div>
+
+<div class="messages-list">
+    {% for message in messages %}
+    <div class="message-card">
+        <div class="message-header">
+            <h3>{{ message.name }}</h3>
+            <span class="message-date">{{ message.created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+        </div>
+        <div class="message-email">
+            <strong>Email:</strong> {{ message.email }}
+        </div>
+        <div class="message-content">
+            {{ message.message }}
+        </div>
+        <div class="message-actions">
+            <a href="mailto:{{ message.email }}" class="reply-btn">Ответить</a>
+            <a href="{{ url_for('delete_message', id=message.id) }}" 
+               class="delete-btn"
+               onclick="return confirm('Вы уверены, что хотите удалить это сообщение?')">
+                Удалить
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="no-messages">
+        <p>Сообщений пока нет</p>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.message-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.message-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.message-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.message-email {
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.message-content {
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+}
+
+.message-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.reply-btn {
+    background: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.reply-btn:hover {
+    background: #45a049;
+}
+
+.delete-btn {
+    background: #f44336;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.delete-btn:hover {
+    background: #da190b;
+}
+
+.no-messages {
+    text-align: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    color: #666;
+}
+</style>
+{% endblock %} 
