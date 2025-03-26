@@ -6,12 +6,6 @@
     <p>{{ category.description }}</p>
 </div>
 
-{% if current_user.is_authenticated %}
-<div class="admin-actions">
-    <a href="{{ url_for('add_product', category_id=category.id) }}" class="cta-button">Добавить товар</a>
-</div>
-{% endif %}
-
 <div class="products-grid">
     {% for product in products %}
     <div class="product-card">
@@ -22,13 +16,9 @@
         {% endif %}
         <h3>{{ product.title }}</h3>
         <p>{{ product.description }}</p>
+        {% if product.price %}
         <div class="product-info">
             <span class="price">{{ "%.2f"|format(product.price) }} BYN</span>
-        </div>
-        {% if current_user.is_authenticated %}
-        <div class="product-actions">
-            <a href="{{ url_for('edit_product', id=product.id) }}" class="edit-btn">Редактировать</a>
-            <a href="{{ url_for('delete_product', id=product.id) }}" class="delete-btn" onclick="return confirm('Вы уверены, что хотите удалить этот товар?')">Удалить</a>
         </div>
         {% endif %}
     </div>
@@ -46,10 +36,6 @@
     .category-header h1 {
         color: var(--color-primary);
         margin-bottom: 10px;
-    }
-    .admin-actions {
-        margin-bottom: 30px;
-        text-align: right;
     }
     .products-grid {
         display: grid;
@@ -98,28 +84,6 @@
     .price {
         font-size: 1.2em;
         font-weight: bold;
-    }
-    .product-actions {
-        padding: 15px;
-        display: flex;
-        gap: 10px;
-        border-top: 1px solid var(--color-border);
-    }
-    .edit-btn, .delete-btn {
-        padding: 8px 16px;
-        border-radius: 4px;
-        text-decoration: none;
-        color: white;
-        font-size: 0.9em;
-    }
-    .edit-btn {
-        background: var(--color-secondary);
-    }
-    .delete-btn {
-        background: #ff4444;
-    }
-    .edit-btn:hover, .delete-btn:hover {
-        opacity: 0.9;
     }
 </style>
 {% endblock %} 

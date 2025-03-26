@@ -198,6 +198,8 @@ def add_product():
 @login_required
 def edit_product(id):
     product = Product.query.get_or_404(id)
+    categories = Category.query.order_by(Category.title).all()
+    
     if request.method == 'POST':
         product.title = request.form.get('title')
         product.description = request.form.get('description')
@@ -221,7 +223,7 @@ def edit_product(id):
         db.session.commit()
         flash('Товар успешно обновлен')
         return redirect(url_for('admin_products'))
-    return render_template('admin/edit_product.html', product=product)
+    return render_template('admin/edit_product.html', product=product, categories=categories)
 
 @app.route('/admin/product/delete/<int:id>')
 @login_required

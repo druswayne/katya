@@ -5,6 +5,17 @@
     <h2>Редактировать товар</h2>
     <form method="POST" enctype="multipart/form-data" class="product-form">
         <div class="form-group">
+            <label for="category_id">Категория</label>
+            <select id="category_id" name="category_id" required>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == product.category_id %}selected{% endif %}>
+                    {{ category.title }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="title">Название товара</label>
             <input type="text" id="title" name="title" value="{{ product.title }}" required>
         </div>
@@ -16,11 +27,13 @@
         
         <div class="form-group">
             <label for="price">Цена</label>
-            <input type="number" id="price" name="price" step="0.01" min="0" value="{{ product.price }}" required>
+            <input type="number" id="price" name="price" step="0.01" min="0" value="{{ product.price }}">
         </div>
         
         <div class="product-info">
+            {% if product.price %}
             <span class="price">{{ "%.2f"|format(product.price) }} BYN</span>
+            {% endif %}
         </div>
         
         <div class="form-group">
@@ -36,7 +49,7 @@
         
         <div class="form-actions">
             <button type="submit" class="submit-btn">Сохранить изменения</button>
-            <a href="{{ url_for('category_products', id=product.category_id) }}" class="cancel-btn">Отмена</a>
+            <a href="{{ url_for('admin_products') }}" class="cancel-btn">Отмена</a>
         </div>
     </form>
 </div>
@@ -60,6 +73,7 @@
     }
     .form-group input[type="text"],
     .form-group input[type="number"],
+    .form-group select,
     .form-group textarea {
         width: 100%;
         padding: 10px;
