@@ -261,6 +261,29 @@ def product_details(id):
         return redirect(url_for('category_products', id=product.category_id))
     return render_template('product_details.html', product=product)
 
+@app.route('/order/<int:product_id>', methods=['POST'])
+def order_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    name = request.form.get('name')
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+    
+    if not all([name, email, phone]):
+        flash('Пожалуйста, заполните все поля')
+        return redirect(url_for('product_details', id=product_id))
+    
+    try:
+        message = f"Заказ товара:\nНазвание: {product.title}\nКатегория: {product.category.title}\nЦена: {product.price} руб.\n\nДанные заказчика:\nИмя: {name}\nEmail: {email}\nТелефон: {phone}"
+        new_message = Message(name=name, email=email, phone=phone, message=message)
+        db.session.add(new_message)
+        db.session.commit()
+        flash('Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.')
+    except Exception as e:
+        db.session.rollback()
+        flash('Произошла ошибка при оформлении заказа. Пожалуйста, попробуйте позже.')
+    
+    return redirect(url_for('product_details', id=product_id))
+
 @app.route('/contact', methods=['POST'])
 def contact():
     name = request.form.get('name')
