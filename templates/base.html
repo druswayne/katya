@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пошив церковных облачений</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип мастерской">
+                </a>
+            </div>
+            <ul class="menu">
+                <li><a href="{{ url_for('index') }}#about">О нас</a></li>
+                <li><a href="{{ url_for('index') }}#products">Изделия</a></li>
+                <li><a href="{{ url_for('index') }}#process">Процесс работы</a></li>
+                <li><a href="{{ url_for('index') }}#contacts">Контакты</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('admin_dashboard') }}">Панель управления</a></li>
+                <li><a href="{{ url_for('admin_logout') }}">Выйти</a></li>
+                {% else %}
+                <li><a href="{{ url_for('admin_login') }}">Войти</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Основной контент -->
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <p>Телефон: +7 (XXX) XXX-XX-XX</p>
+                <p>Email: info@example.com</p>
+                <p>Адрес: Ваш адрес</p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .flash-message {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--color-primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        main {
+            margin-top: 80px;
+            min-height: calc(100vh - 80px - 200px);
+        }
+    </style>
+</body>
+</html> 

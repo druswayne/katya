@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="category-header">
+    <h1>{{ category.title }}</h1>
+    <p>{{ category.description }}</p>
+</div>
+
+{% if current_user.is_authenticated %}
+<div class="admin-actions">
+    <a href="{{ url_for('add_product', category_id=category.id) }}" class="cta-button">Добавить товар</a>
+</div>
+{% endif %}
+
+<div class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        {% if product.image_path %}
+        <img src="{{ url_for('static', filename='uploads/' + product.image_path) }}" alt="{{ product.title }}">
+        {% else %}
+        <div class="no-image">Нет изображения</div>
+        {% endif %}
+        <h3>{{ product.title }}</h3>
+        <p>{{ product.description }}</p>
+        <div class="product-info">
+            <span class="price">{{ "%.2f"|format(product.price) }} BYN</span>
+        </div>
+        {% if current_user.is_authenticated %}
+        <div class="product-actions">
+            <a href="{{ url_for('edit_product', id=product.id) }}" class="edit-btn">Редактировать</a>
+            <a href="{{ url_for('delete_product', id=product.id) }}" class="delete-btn" onclick="return confirm('Вы уверены, что хотите удалить этот товар?')">Удалить</a>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .category-header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding: 20px;
+        background: var(--color-light);
+        border-radius: 10px;
+    }
+    .category-header h1 {
+        color: var(--color-primary);
+        margin-bottom: 10px;
+    }
+    .admin-actions {
+        margin-bottom: 30px;
+        text-align: right;
+    }
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        padding: 20px;
+    }
+    .product-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(139, 69, 19, 0.1);
+        transition: transform 0.3s ease;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+    .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    .no-image {
+        width: 100%;
+        height: 200px;
+        background: var(--color-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text);
+    }
+    .product-card h3 {
+        padding: 15px;
+        margin: 0;
+        color: var(--color-primary);
+    }
+    .product-card p {
+        padding: 0 15px;
+        color: var(--color-text);
+        margin-bottom: 15px;
+    }
+    .product-info {
+        padding: 0 15px;
+        margin-bottom: 15px;
+    }
+    .price {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+    .product-actions {
+        padding: 15px;
+        display: flex;
+        gap: 10px;
+        border-top: 1px solid var(--color-border);
+    }
+    .edit-btn, .delete-btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        color: white;
+        font-size: 0.9em;
+    }
+    .edit-btn {
+        background: var(--color-secondary);
+    }
+    .delete-btn {
+        background: #ff4444;
+    }
+    .edit-btn:hover, .delete-btn:hover {
+        opacity: 0.9;
+    }
+</style>
+{% endblock %} 

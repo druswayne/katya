@@ -70,8 +70,20 @@ def admin_logout():
 @app.route('/admin/dashboard')
 @login_required
 def admin_dashboard():
+    return render_template('admin/dashboard.html')
+
+@app.route('/admin/categories')
+@login_required
+def admin_categories():
     categories = Category.query.order_by(Category.created_at.desc()).all()
-    return render_template('admin/dashboard.html', categories=categories)
+    return render_template('admin/categories.html', categories=categories)
+
+@app.route('/admin/products')
+@login_required
+def admin_products():
+    categories = Category.query.order_by(Category.title).all()
+    products = Product.query.order_by(Product.created_at.desc()).all()
+    return render_template('admin/products.html', categories=categories, products=products)
 
 @app.route('/admin/category/add', methods=['GET', 'POST'])
 @login_required
@@ -98,7 +110,7 @@ def add_category():
         db.session.add(category)
         db.session.commit()
         flash('Категория успешно добавлена')
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_categories'))
     return render_template('admin/add_category.html')
 
 @app.route('/admin/category/edit/<int:id>', methods=['GET', 'POST'])
@@ -127,7 +139,7 @@ def edit_category(id):
             
         db.session.commit()
         flash('Категория успешно обновлена')
-        return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('admin_categories'))
     return render_template('admin/edit_category.html', category=category)
 
 @app.route('/admin/category/delete/<int:id>')
@@ -144,7 +156,7 @@ def delete_category(id):
     db.session.delete(category)
     db.session.commit()
     flash('Категория успешно удалена')
-    return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('admin_categories'))
 
 @app.route('/category/<int:id>')
 def category_products(id):
@@ -152,14 +164,14 @@ def category_products(id):
     products = Product.query.filter_by(category_id=id).order_by(Product.created_at.desc()).all()
     return render_template('category_products.html', category=category, products=products)
 
-@app.route('/admin/product/add/<int:category_id>', methods=['GET', 'POST'])
+@app.route('/admin/product/add', methods=['GET', 'POST'])
 @login_required
-def add_product(category_id):
-    category = Category.query.get_or_404(category_id)
+def add_product():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
         price = float(request.form.get('price', 0))
+        category_id = int(request.form.get('category_id'))
         image = request.files.get('image')
         
         if image:
@@ -179,8 +191,8 @@ def add_product(category_id):
         db.session.add(product)
         db.session.commit()
         flash('Товар успешно добавлен')
-        return redirect(url_for('category_products', id=category_id))
-    return render_template('admin/add_product.html', category=category)
+        return redirect(url_for('admin_products'))
+    return redirect(url_for('admin_products'))
 
 @app.route('/admin/product/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -190,6 +202,7 @@ def edit_product(id):
         product.title = request.form.get('title')
         product.description = request.form.get('description')
         product.price = float(request.form.get('price', 0))
+        product.category_id = int(request.form.get('category_id'))
         image = request.files.get('image')
         
         if image:
@@ -207,14 +220,13 @@ def edit_product(id):
             
         db.session.commit()
         flash('Товар успешно обновлен')
-        return redirect(url_for('category_products', id=product.category_id))
+        return redirect(url_for('admin_products'))
     return render_template('admin/edit_product.html', product=product)
 
 @app.route('/admin/product/delete/<int:id>')
 @login_required
 def delete_product(id):
     product = Product.query.get_or_404(id)
-    category_id = product.category_id
     if product.image_path:
         try:
             image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.image_path)
@@ -225,7 +237,7 @@ def delete_product(id):
     db.session.delete(product)
     db.session.commit()
     flash('Товар успешно удален')
-    return redirect(url_for('category_products', id=category_id))
+    return redirect(url_for('admin_products'))
 
 # Создание базы данных и администратора
 def init_db():
