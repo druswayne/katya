@@ -26,6 +26,16 @@ class Category(db.Model):
     description = db.Column(db.Text)
     image_path = db.Column(db.String(200))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    products = db.relationship('Product', backref='category', lazy=True)
+
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text)
+    price = db.Column(db.Float)
+    image_path = db.Column(db.String(200))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -135,6 +145,87 @@ def delete_category(id):
     db.session.commit()
     flash('Категория успешно удалена')
     return redirect(url_for('admin_dashboard'))
+
+@app.route('/category/<int:id>')
+def category_products(id):
+    category = Category.query.get_or_404(id)
+    products = Product.query.filter_by(category_id=id).order_by(Product.created_at.desc()).all()
+    return render_template('category_products.html', category=category, products=products)
+
+@app.route('/admin/product/add/<int:category_id>', methods=['GET', 'POST'])
+@login_required
+def add_product(category_id):
+    category = Category.query.get_or_404(category_id)
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+        price = float(request.form.get('price', 0))
+        image = request.files.get('image')
+        
+        if image:
+            filename = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{image.filename}"
+            image_path = filename
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            image_path = None
+            
+        product = Product(
+            title=title,
+            description=description,
+            price=price,
+            image_path=image_path,
+            category_id=category_id
+        )
+        db.session.add(product)
+        db.session.commit()
+        flash('Товар успешно добавлен')
+        return redirect(url_for('category_products', id=category_id))
+    return render_template('admin/add_product.html', category=category)
+
+@app.route('/admin/product/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_product(id):
+    product = Product.query.get_or_404(id)
+    if request.method == 'POST':
+        product.title = request.form.get('title')
+        product.description = request.form.get('description')
+        product.price = float(request.form.get('price', 0))
+        image = request.files.get('image')
+        
+        if image:
+            if product.image_path:
+                try:
+                    old_image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.image_path)
+                    if os.path.exists(old_image_path):
+                        os.remove(old_image_path)
+                except:
+                    pass
+            
+            filename = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{image.filename}"
+            product.image_path = filename
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
+        db.session.commit()
+        flash('Товар успешно обновлен')
+        return redirect(url_for('category_products', id=product.category_id))
+    return render_template('admin/edit_product.html', product=product)
+
+@app.route('/admin/product/delete/<int:id>')
+@login_required
+def delete_product(id):
+    product = Product.query.get_or_404(id)
+    category_id = product.category_id
+    if product.image_path:
+        try:
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.image_path)
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        except:
+            pass
+    db.session.delete(product)
+    db.session.commit()
+    flash('Товар успешно удален')
+    return redirect(url_for('category_products', id=category_id))
 
 # Создание базы данных и администратора
 def init_db():
