@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from datetime import datetime
@@ -11,6 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = 'admin_login'
 
@@ -33,9 +35,10 @@ class Product(db.Model):
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
     price = db.Column(db.Float)
-    image_path = db.Column(db.String(200))
+    image_path = db.Column(db.String(255))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_active = db.Column(db.Boolean, default=True)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -203,8 +206,9 @@ def edit_product(id):
     if request.method == 'POST':
         product.title = request.form.get('title')
         product.description = request.form.get('description')
-        product.price = float(request.form.get('price', 0))
+        product.price = float(request.form.get('price', 0)) if request.form.get('price') else None
         product.category_id = int(request.form.get('category_id'))
+        product.is_active = 'is_active' in request.form
         image = request.files.get('image')
         
         if image:
