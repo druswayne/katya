@@ -146,21 +146,29 @@
 
         .modal-content {
             background: white;
-            padding: 2rem;
-            border-radius: 10px;
+            padding: 2.5rem;
+            border-radius: 15px;
             width: 90%;
             max-width: 500px;
             position: relative;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h3 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+            font-size: 1.5rem;
         }
 
         .close-btn {
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
             cursor: pointer;
             color: var(--color-text);
+            transition: color 0.3s ease;
         }
 
         .close-btn:hover {
@@ -168,37 +176,75 @@
         }
 
         .modal .contact-form {
-            margin-top: 1rem;
-            box-shadow: none;
-            padding: 0;
+            margin-top: 1.5rem;
         }
 
-        .form-group {
-            margin-bottom: 1rem;
+        .modal .form-group {
+            margin-bottom: 1.2rem;
         }
 
-        .submit-btn {
+        .modal .form-group input,
+        .modal .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'TTCommons', sans-serif;
+            transition: all 0.3s ease;
+            background: #f8f8f8;
+        }
+
+        .modal .form-group input:focus,
+        .modal .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.1);
+        }
+
+        .modal .form-group input::placeholder,
+        .modal .form-group textarea::placeholder {
+            color: #999;
+        }
+
+        .modal .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+            max-height: 200px;
+        }
+
+        .modal .submit-btn {
+            width: 100%;
+            padding: 12px;
             background: var(--color-secondary);
             color: var(--color-dark);
-            padding: 0.8rem 1.5rem;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: 'TTCommons', sans-serif;
+            border-radius: 8px;
             font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
             transition: all 0.3s ease;
-            width: 100%;
+            margin-top: 0.5rem;
         }
 
-        .submit-btn:hover {
+        .modal .submit-btn:hover {
             background: var(--color-primary);
             color: var(--color-light);
+            transform: translateY(-2px);
         }
 
         @media (max-width: 768px) {
             .modal-content {
                 width: 95%;
                 padding: 1.5rem;
+                margin: 20px;
+            }
+
+            .modal .form-group input,
+            .modal .form-group textarea {
+                padding: 10px 12px;
+                font-size: 0.95rem;
             }
         }
 
@@ -350,7 +396,7 @@
                     <input type="text" name="name" required placeholder="Ваше имя">
                 </div>
                 <div class="form-group">
-                    <input type="email" name="email" required placeholder="Ваш email">
+                    <input type="email" name="email" placeholder="Ваш email (необязательно)">
                 </div>
                 <div class="form-group">
                     <input type="tel" name="phone" required placeholder="Ваш телефон">
