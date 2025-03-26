@@ -245,6 +245,14 @@ def delete_product(id):
     flash('Товар успешно удален')
     return redirect(url_for('admin_products'))
 
+@app.route('/product/<int:id>')
+def product_details(id):
+    product = Product.query.get_or_404(id)
+    if not product.is_active:
+        flash('Товар временно недоступен')
+        return redirect(url_for('category_products', id=product.category_id))
+    return render_template('product_details.html', product=product)
+
 # Создание базы данных и администратора
 def init_db():
     with app.app_context():
