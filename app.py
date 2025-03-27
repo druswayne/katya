@@ -358,10 +358,8 @@ def delete_product_image(image_id):
 @app.route('/product/<int:id>')
 def product_details(id):
     product = Product.query.get_or_404(id)
-    if not product.is_active:
-        flash('Товар временно недоступен')
-        return redirect(url_for('category_products', id=product.category_id))
-    return render_template('product_details.html', product=product)
+    category = Category.query.get(product.category_id)
+    return render_template('product_details.html', product=product, category=category)
 
 @app.route('/order/<int:product_id>', methods=['POST'])
 def order_product(product_id):
@@ -434,9 +432,9 @@ def delete_message(id):
 # Создание базы данных и администратора
 def init_db():
     with app.app_context():
-        db.drop_all()
+        # Создаем таблицы, если они не существуют
         db.create_all()
-        # Создаем администратора, если его нет
+        # Создаем администратора, только если его нет
         if not User.query.first():
             admin = User(
                 username='admin',

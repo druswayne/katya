@@ -35,14 +35,16 @@
         </div>
 
         <div class="product-info">
-            <div class="description">
-                {{ product.description }}
-            </div>
-            {% if product.price %}
-            <div class="price">
-                <span>{{ "%.2f"|format(product.price) }} BYN</span>
+            <h1>{{ product.title }}</h1>
+            {% if category %}
+            <div class="category-info">
+                <a href="{{ url_for('category_products', id=category.id) }}" class="category-link">
+                    Категория: {{ category.title }}
+                </a>
             </div>
             {% endif %}
+            <div class="price">{{ product.price }} ₽</div>
+            <div class="description">{{ product.description }}</div>
             <button class="order-btn" onclick="showOrderForm()">Заказать</button>
         </div>
     </div>
