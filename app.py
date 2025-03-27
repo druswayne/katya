@@ -40,6 +40,13 @@ class Product(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_active = db.Column(db.Boolean, default=True)
+    additional_images = db.relationship('ProductImage', backref='product', lazy=True, cascade='all, delete-orphan')
+
+class ProductImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_path = db.Column(db.String(255), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -228,6 +235,7 @@ def add_product():
     price = request.form.get('price')
     category_id = request.form.get('category_id')
     image = request.files.get('image')
+    additional_images = request.files.getlist('additional_images')
     
     if not all([title, description, price, category_id]):
         flash('Пожалуйста, заполните все обязательные поля')
@@ -244,14 +252,18 @@ def add_product():
         db.session.commit()
         
         if image:
-            # Генерируем уникальное имя файла
             filename = generate_unique_filename(image.filename)
-            # Сохраняем файл
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # Обновляем путь к изображению в базе данных
             new_product.image_path = filename
-            db.session.commit()
         
+        for additional_image in additional_images:
+            if additional_image:
+                filename = generate_unique_filename(additional_image.filename)
+                additional_image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                product_image = ProductImage(image_path=filename, product_id=new_product.id)
+                db.session.add(product_image)
+        
+        db.session.commit()
         flash('Товар успешно добавлен')
     except Exception as e:
         db.session.rollback()
@@ -273,6 +285,7 @@ def edit_product(id):
     price = request.form.get('price')
     category_id = request.form.get('category_id')
     image = request.files.get('image')
+    additional_images = request.files.getlist('additional_images')
     is_active = 'is_active' in request.form
     
     if not all([title, description, price, category_id]):
@@ -287,18 +300,20 @@ def edit_product(id):
         product.is_active = is_active
         
         if image:
-            # Удаляем старое изображение, если оно есть
             if product.image_path:
                 old_image_path = os.path.join(app.config['UPLOAD_FOLDER'], product.image_path)
                 if os.path.exists(old_image_path):
                     os.remove(old_image_path)
-            
-            # Генерируем уникальное имя файла
             filename = generate_unique_filename(image.filename)
-            # Сохраняем новый файл
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # Обновляем путь к изображению в базе данных
             product.image_path = filename
+        
+        for additional_image in additional_images:
+            if additional_image:
+                filename = generate_unique_filename(additional_image.filename)
+                additional_image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                product_image = ProductImage(image_path=filename, product_id=product.id)
+                db.session.add(product_image)
         
         db.session.commit()
         flash('Товар успешно обновлен')
@@ -323,6 +338,22 @@ def delete_product(id):
     db.session.commit()
     flash('Товар успешно удален')
     return redirect(url_for('admin_products'))
+
+@app.route('/admin/product/delete_image/<int:image_id>')
+@login_required
+def delete_product_image(image_id):
+    product_image = ProductImage.query.get_or_404(image_id)
+    try:
+        image_path = os.path.join(app.config['UPLOAD_FOLDER'], product_image.image_path)
+        if os.path.exists(image_path):
+            os.remove(image_path)
+        db.session.delete(product_image)
+        db.session.commit()
+        flash('Изображение успешно удалено')
+    except Exception as e:
+        db.session.rollback()
+        flash('Произошла ошибка при удалении изображения')
+    return redirect(url_for('edit_product', id=product_image.product_id))
 
 @app.route('/product/<int:id>')
 def product_details(id):
@@ -370,12 +401,12 @@ def contact():
     phone = request.form.get('phone')
     message = request.form.get('message')
     
-    if not all([name, email, message]):
+    if not all([name, phone]):
         flash('Пожалуйста, заполните все обязательные поля')
         return redirect(url_for('index', _anchor='contacts'))
     
     try:
-        new_message = Message(name=name, email=email, phone=phone, message=message)
+        new_message = Message(name=name, email=email, phone=phone, message=message or "Сообщение не указано")
         db.session.add(new_message)
         db.session.commit()
         flash('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.')
@@ -403,6 +434,7 @@ def delete_message(id):
 # Создание базы данных и администратора
 def init_db():
     with app.app_context():
+        db.drop_all()
         db.create_all()
         # Создаем администратора, если его нет
         if not User.query.first():
