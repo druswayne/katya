@@ -470,6 +470,164 @@
                 padding: 1.5rem;
             }
         }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 10px;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .admin-header h1 {
+                font-size: 1.5em;
+            }
+
+            .admin-section {
+                padding: 15px;
+            }
+
+            .admin-form {
+                padding: 0;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-group input[type="text"],
+            .form-group textarea {
+                font-size: 16px;
+            }
+
+            .form-group textarea {
+                min-height: 80px;
+            }
+
+            .current-image img {
+                max-width: 100%;
+                max-height: 150px;
+            }
+
+            .submit-btn {
+                width: 100%;
+                max-width: none;
+                padding: 0.8rem 1.5rem;
+            }
+
+            .back-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .admin-actions {
+                width: 100%;
+            }
+
+            .admin-actions a {
+                width: 100%;
+                text-align: center;
+            }
+
+            .admin-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .admin-table th,
+            .admin-table td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+            .action-btn {
+                padding: 6px 12px;
+                font-size: 0.9em;
+            }
+
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .checkbox-group label {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .checkbox-group input[type="checkbox"] {
+                margin: 0;
+            }
+
+            .login-container {
+                width: 95%;
+                padding: 1.5rem;
+                margin: 50px auto;
+            }
+
+            .login-form {
+                gap: 1rem;
+            }
+
+            .login-form input {
+                padding: 0.8rem;
+                font-size: 16px;
+            }
+
+            .login-form button {
+                padding: 0.8rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-header h1 {
+                font-size: 1.3em;
+            }
+
+            .form-group label {
+                font-size: 0.9em;
+            }
+
+            .form-group input[type="text"],
+            .form-group textarea {
+                font-size: 16px;
+            }
+
+            .submit-btn {
+                font-size: 0.9em;
+                padding: 0.7rem 1.2rem;
+            }
+
+            .action-btn {
+                padding: 5px 10px;
+                font-size: 0.8em;
+            }
+
+            .admin-table th,
+            .admin-table td {
+                padding: 6px;
+                font-size: 0.8em;
+            }
+
+            .login-container {
+                padding: 1rem;
+            }
+
+            .login-form input {
+                padding: 0.7rem;
+            }
+
+            .login-form button {
+                padding: 0.7rem;
+                font-size: 0.9em;
+            }
+        }
     </style>
 </head>
 <body>
