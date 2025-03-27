@@ -295,17 +295,21 @@
 
     .main-image {
         width: 100%;
-        height: 400px;
+        height: auto;
         overflow: hidden;
         border-radius: 8px;
         margin-bottom: 1rem;
         position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .main-image img {
         width: 100%;
-        height: 100%;
-        object-fit: cover;
+        height: auto;
+        max-height: 600px;
+        object-fit: contain;
     }
 
     .main-image-nav {
@@ -348,8 +352,8 @@
     }
 
     @media (max-width: 768px) {
-        .main-image {
-            height: 300px;
+        .main-image img {
+            max-height: 400px;
         }
 
         .main-image-nav {
