@@ -1,17 +1,30 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
 import uuid
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
+# Настройки для отправки email
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'  # Используем Gmail
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'mazaxak2@gmail.com'  # Замените на ваш email
+app.config['MAIL_PASSWORD'] = 'mfjocvtygurkuteo'  # Замените на ваш пароль приложения
+app.config['MAIL_DEFAULT_SENDER'] = 'mazaxak2@gmail.com'  # Замените на ваш email
+
+mail = Mail(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager(app)
@@ -48,7 +61,7 @@ class ProductImage(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-class Message(db.Model):
+class ContactMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
@@ -382,7 +395,7 @@ def order_product(product_id):
         if comment:
             message += f"\n\nКомментарий к заказу:\n{comment}"
             
-        new_message = Message(name=name, email=email or "Не указан", phone=phone, message=message)
+        new_message = ContactMessage(name=name, email=email or "Не указан", phone=phone, message=message)
         db.session.add(new_message)
         db.session.commit()
         flash('Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.')
@@ -404,9 +417,30 @@ def contact():
         return redirect(url_for('index', _anchor='contacts'))
     
     try:
-        new_message = Message(name=name, email=email, phone=phone, message=message or "Сообщение не указано")
+        new_message = ContactMessage(name=name, email=email, phone=phone, message=message or "Сообщение не указано")
         db.session.add(new_message)
         db.session.commit()
+
+        # Отправка уведомления администратору
+        try:
+            msg = Message()
+            msg.recipients = [app.config['MAIL_USERNAME']]
+            msg.subject = 'Новое сообщение с сайта'
+            msg.body = f"""
+            Получено новое сообщение с сайта:
+            
+            Имя: {name}
+            Телефон: {phone}
+            Email: {email if email else 'Не указан'}
+            
+            Сообщение:
+            {message if message else 'Сообщение не указано'}
+            """
+            mail.send(msg)
+        except Exception as e:
+            print(f"Ошибка отправки email: {e}")
+            # Не прерываем выполнение функции, если не удалось отправить email
+
         flash('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.')
     except Exception as e:
         db.session.rollback()
@@ -417,13 +451,13 @@ def contact():
 @app.route('/admin/messages')
 @login_required
 def admin_messages():
-    messages = Message.query.order_by(Message.created_at.desc()).all()
+    messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).all()
     return render_template('admin/messages.html', messages=messages)
 
 @app.route('/admin/message/delete/<int:id>')
 @login_required
 def delete_message(id):
-    message = Message.query.get_or_404(id)
+    message = ContactMessage.query.get_or_404(id)
     db.session.delete(message)
     db.session.commit()
     flash('Сообщение успешно удалено')
