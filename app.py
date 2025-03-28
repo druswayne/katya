@@ -398,6 +398,32 @@ def order_product(product_id):
         new_message = ContactMessage(name=name, email=email or "Не указан", phone=phone, message=message)
         db.session.add(new_message)
         db.session.commit()
+
+        # Отправка уведомления администратору
+        try:
+            msg = Message()
+            msg.recipients = [app.config['MAIL_USERNAME']]
+            msg.subject = 'Новый заказ на сайте'
+            msg.body = f"""
+            Получен новый заказ на сайте:
+            
+            Товар: {product.title}
+            Категория: {product.category.title}
+            Цена: {product.price} BYN
+            
+            Данные заказчика:
+            Имя: {name}
+            Телефон: {phone}
+            Email: {email if email else 'Не указан'}
+            
+            Комментарий к заказу:
+            {comment if comment else 'Комментарий не указан'}
+            """
+            mail.send(msg)
+        except Exception as e:
+            print(f"Ошибка отправки email: {e}")
+            # Не прерываем выполнение функции, если не удалось отправить email
+
         flash('Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.')
     except Exception as e:
         db.session.rollback()
