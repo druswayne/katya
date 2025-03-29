@@ -23,10 +23,10 @@
             top: 100px;
             right: 20px;
             background: var(--color-primary);
-            color: white;
+            color: var(--color-light);
             padding: 15px 25px;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 10px var(--shadow-color);
             z-index: 1000;
             animation: slideIn 0.3s ease-out;
         }
@@ -77,7 +77,7 @@
             margin-top: 20px;
         }
         .social-btn {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--overlay-light);
             padding: 10px;
             border-radius: 50%;
             transition: all 0.3s ease;
@@ -86,7 +86,7 @@
             justify-content: center;
         }
         .social-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--overlay-light-hover);
             transform: translateY(-3px);
         }
         .social-btn img {
@@ -98,7 +98,7 @@
             text-align: center;
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--overlay-light);
         }
         @media (max-width: 768px) {
             .social-links {
@@ -119,7 +119,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-family: 'TTCommons', sans-serif;
+            font-family: var(--font-primary);
             font-size: 1rem;
             transition: all 0.3s ease;
         }
@@ -138,7 +138,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: var(--overlay-dark);
             justify-content: center;
             align-items: center;
             z-index: 1001;
@@ -147,13 +147,13 @@
         }
 
         .modal-content {
-            background: white;
+            background: var(--color-light);
             padding: 1.5rem;
             border-radius: 12px;
             width: 90%;
             max-width: 350px;
             position: relative;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 25px var(--shadow-color-strong);
             margin: auto;
         }
 
@@ -190,25 +190,25 @@
         .modal .form-group textarea {
             width: 100%;
             padding: 8px 10px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--color-border);
             border-radius: 5px;
             font-size: 0.9rem;
-            font-family: 'TTCommons', sans-serif;
+            font-family: var(--font-primary);
             transition: all 0.3s ease;
-            background: #f8f8f8;
+            background: var(--color-background);
         }
 
         .modal .form-group input:focus,
         .modal .form-group textarea:focus {
             outline: none;
             border-color: var(--color-secondary);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.1);
+            background: var(--color-light);
+            box-shadow: 0 0 0 3px var(--focus-shadow);
         }
 
         .modal .form-group input::placeholder,
         .modal .form-group textarea::placeholder {
-            color: #999;
+            color: var(--color-placeholder);
         }
 
         .modal .form-group textarea {
@@ -266,13 +266,13 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            font-family: 'TTCommons', sans-serif;
+            font-family: var(--font-primary);
             font-size: 1.1rem;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px var(--shadow-color);
             transition: all 0.3s ease;
             z-index: 1000;
         }
@@ -281,7 +281,7 @@
             background: var(--color-primary);
             color: var(--color-light);
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 20px var(--shadow-color-strong);
         }
 
         .contact-icon {
@@ -659,12 +659,12 @@
                 right: -100%;
                 width: 100%;
                 height: 100vh;
-                background: white;
+                background: var(--color-light);
                 padding: 80px 20px 20px;
                 transition: right 0.3s ease;
                 z-index: 999;
                 overflow-y: auto;
-                box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+                box-shadow: -2px 0 10px var(--shadow-color);
             }
 
             .nav-right.active {
@@ -706,7 +706,7 @@
                 background: var(--color-secondary);
                 color: var(--color-dark);
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(218, 165, 32, 0.2);
+                box-shadow: 0 4px 12px var(--button-shadow);
             }
 
             .menu-toggle.active {
@@ -760,6 +760,7 @@
                 align-items: center;
                 padding: 10px 20px;
                 position: relative;
+                background: var(--color-light);
             }
 
             .logo {
