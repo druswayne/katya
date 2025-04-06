@@ -507,4 +507,4 @@ if __name__ == '__main__':
     # Создаем папку для загрузок, если её нет
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     init_db()
-    app.run(debug=True) 
+    app.run(debug=True, port=1234)

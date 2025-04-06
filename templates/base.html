@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Пошив церковных облачений</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         @font-face {
@@ -15,7 +18,7 @@
         }
 
         * {
-            font-family: 'TTCommons', sans-serif;
+            font-family: var(--font-primary);
         }
 
         .flash-message {
@@ -29,6 +32,7 @@
             box-shadow: 0 2px 10px var(--shadow-color);
             z-index: 1000;
             animation: slideIn 0.3s ease-out;
+            font-size: var(--font-size-base);
         }
 
         @keyframes slideIn {
@@ -64,11 +68,13 @@
         }
         .footer-section h3 {
             margin-bottom: 20px;
-            font-size: 1.2em;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
         }
         .footer-section p {
             margin: 10px 0;
-            line-height: 1.6;
+            line-height: var(--line-height-base);
+            font-size: var(--font-size-base);
         }
         .social-links {
             display: flex;
@@ -120,8 +126,9 @@
             border-radius: 4px;
             cursor: pointer;
             font-family: var(--font-primary);
-            font-size: 1rem;
+            font-size: var(--font-size-base);
             transition: all 0.3s ease;
+            font-weight: var(--font-weight-medium);
         }
 
         .contact-btn:hover {
@@ -161,14 +168,15 @@
             text-align: center;
             margin-bottom: 1rem;
             color: var(--color-primary);
-            font-size: 1.2rem;
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
         }
 
         .close-btn {
             position: absolute;
             top: 10px;
             right: 12px;
-            font-size: 20px;
+            font-size: var(--font-size-xl);
             cursor: pointer;
             color: var(--color-text);
             transition: color 0.3s ease;
@@ -192,7 +200,7 @@
             padding: 8px 10px;
             border: 1px solid var(--color-border);
             border-radius: 5px;
-            font-size: 0.9rem;
+            font-size: var(--font-size-sm);
             font-family: var(--font-primary);
             transition: all 0.3s ease;
             background: var(--color-background);
@@ -224,8 +232,8 @@
             color: var(--color-dark);
             border: none;
             border-radius: 5px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 0.3rem;
@@ -251,7 +259,7 @@
             .modal .form-group input,
             .modal .form-group textarea {
                 padding: 7px 9px;
-                font-size: 0.85rem;
+                font-size: var(--font-size-sm);
             }
         }
 
@@ -267,8 +275,8 @@
             border-radius: 50px;
             cursor: pointer;
             font-family: var(--font-primary);
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: var(--font-size-md);
+            font-weight: var(--font-weight-medium);
             display: flex;
             align-items: center;
             gap: 10px;
@@ -285,7 +293,7 @@
         }
 
         .contact-icon {
-            font-size: 1.3rem;
+            font-size: var(--font-size-lg);
         }
 
         @media (max-width: 768px) {
@@ -293,15 +301,15 @@
                 bottom: 20px;
                 right: 20px;
                 padding: 12px 20px;
-                font-size: 1rem;
+                font-size: var(--font-size-base);
             }
             
-            .contact-text {
+            .contact-text {color:#fff;
                 display: none;
             }
 
             .contact-icon {
-                font-size: 1.5rem;
+                font-size: var(--font-size-xl);
             }
 
             .floating-contact-btn {
@@ -361,8 +369,8 @@
 
         .category-card .overlay h3 {
             margin: 0;
-            font-size: 1.5em;
-            font-weight: 600;
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
             text-align: center;
             width: 100%;
@@ -371,9 +379,9 @@
 
         .category-card .overlay p {
             margin: 10px 0 0;
-            font-size: 1.1em;
+            font-size: var(--font-size-md);
             opacity: 0.9;
-            line-height: 1.4;
+            line-height: var(--line-height-base);
             text-align: center;
             width: 100%;
             display: block;
@@ -414,6 +422,8 @@
             text-align: center;
             margin-bottom: 2rem;
             color: var(--color-primary);
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
         }
 
         .login-form {
@@ -430,14 +440,14 @@
 
         .login-form label {
             color: var(--color-text);
-            font-weight: 500;
+            font-weight: var(--font-weight-medium);
         }
 
         .login-form input {
             padding: 0.8rem;
             border: 1px solid var(--color-border);
             border-radius: 5px;
-            font-size: 1rem;
+            font-size: var(--font-size-base);
             transition: border-color 0.3s ease;
         }
 
@@ -452,8 +462,8 @@
             padding: 1rem;
             border: none;
             border-radius: 5px;
-            font-size: 1rem;
-            font-weight: 500;
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -483,7 +493,7 @@
             }
 
             .admin-header h1 {
-                font-size: 1.5em;
+                font-size: var(--font-size-xl);
             }
 
             .admin-section {
@@ -500,7 +510,7 @@
 
             .form-group input[type="text"],
             .form-group textarea {
-                font-size: 16px;
+                font-size: var(--font-size-base);
             }
 
             .form-group textarea {
@@ -541,12 +551,12 @@
             .admin-table th,
             .admin-table td {
                 padding: 8px;
-                font-size: 0.9em;
+                font-size: var(--font-size-sm);
             }
 
             .action-btn {
                 padding: 6px 12px;
-                font-size: 0.9em;
+                font-size: var(--font-size-sm);
             }
 
             .checkbox-group {
@@ -576,43 +586,43 @@
 
             .login-form input {
                 padding: 0.8rem;
-                font-size: 16px;
+                font-size: var(--font-size-base);
             }
 
             .login-form button {
                 padding: 0.8rem;
-                font-size: 1rem;
+                font-size: var(--font-size-base);
             }
         }
 
         @media (max-width: 480px) {
             .admin-header h1 {
-                font-size: 1.3em;
+                font-size: var(--font-size-lg);
             }
 
             .form-group label {
-                font-size: 0.9em;
+                font-size: var(--font-size-sm);
             }
 
             .form-group input[type="text"],
             .form-group textarea {
-                font-size: 16px;
+                font-size: var(--font-size-base);
             }
 
-            .submit-btn {
-                font-size: 0.9em;
+            .submit-btn {color:#fff
+                font-size: var(--font-size-xs);
                 padding: 0.7rem 1.2rem;
             }
 
             .action-btn {
                 padding: 5px 10px;
-                font-size: 0.8em;
+                font-size: var(--font-size-xs);
             }
 
             .admin-table th,
             .admin-table td {
                 padding: 6px;
-                font-size: 0.8em;
+                font-size: var(--font-size-xs);
             }
 
             .login-container {
@@ -625,7 +635,7 @@
 
             .login-form button {
                 padding: 0.7rem;
-                font-size: 0.9em;
+                font-size: var(--font-size-sm);
             }
         }
 
@@ -690,7 +700,7 @@
             .menu a {
                 display: block;
                 padding: 15px 20px;
-                font-size: 1.1em;
+                font-size: var(--font-size-md);
                 color: var(--color-primary);
                 text-decoration: none;
                 border: 2px solid var(--color-secondary);
@@ -699,7 +709,7 @@
                 width: 100%;
                 box-sizing: border-box;
                 background: transparent;
-                font-weight: 500;
+                font-weight: var(--font-weight-medium);
             }
 
             .menu a:hover {
@@ -776,7 +786,7 @@
 <body>
     <!-- Шапка сайта -->
     <header>
-        <nav>
+        <nav style="background-color:#efeaea">
             <div class="logo">
                 <a href="{{ url_for('index') }}">
                     <img src="{{ url_for('static', filename='logo.png') }}" alt="Логотип мастерской">
@@ -824,17 +834,17 @@
         <div class="footer-content">
             <div id="footer-contacts" class="footer-section">
                 <h3>Контакты</h3>
-                <p>Телефон: +375 (29) 123-45-67</p>
-                <p>Email: info@example.com</p>
-                <p>Адрес: г. Минск, ул. Примерная, 123</p>
+                <p>Телефон: +375 (29) 776-56-08 </p>
+                <p>Email: Kate_box21@mail.ru</p>
+                <p>Адрес: Республика Беларусь, Гродненская область, аг.Пограничный</p>
             </div>
             <div class="footer-section">
                 <h3>Мы в социальных сетях</h3>
                 <div class="social-links">
-                    <a href="https://vk.com/your_page" target="_blank" class="social-btn">
+                    <a href="https://vk.com/id2456696" target="_blank" class="social-btn">
                         <img src="{{ url_for('static', filename='vk.png') }}" alt="VK">
                     </a>
-                    <a href="https://instagram.com/your_page" target="_blank" class="social-btn">
+                    <a href="https://www.instagram.com/hm_by_lily?utm_source=qr&igsh=d2NhN3A0djU0dWhu" target="_blank" class="social-btn">
                         <img src="{{ url_for('static', filename='Instagram.png') }}" alt="Instagram">
                     </a>
                     <a href="https://t.me/your_channel" target="_blank" class="social-btn">
@@ -844,7 +854,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Пошив церковных облачений. Все права защищены.</p>
+            <p>&copy; 2025 Пошив церковных облачений. Все права защищены.</p>
         </div>
     </footer>
 
@@ -853,8 +863,8 @@
 
     <!-- Кнопка связи -->
     <button class="floating-contact-btn" onclick="openContactModal()">
-        <span class="contact-icon">✉</span>
-        <span class="contact-text">Связаться с нами</span>
+        <span class="contact-icon" style="color:#fff">✉</span>
+        <span class="contact-text" style="color:#fff">Связаться с нами</span>
     </button>
 
     <!-- Модальное окно с формой для связи -->
@@ -875,7 +885,7 @@
                 <div class="form-group">
                     <textarea name="message" placeholder="Ваше сообщение (необязательно)"></textarea>
                 </div>
-                <button type="submit" class="submit-btn">Отправить</button>
+                <button type="submit" class="submit-btn" style="color:#fff">Отправить</button>
             </form>
         </div>
     </div>

@@ -1,16 +1,16 @@
 /* Переменные с цветами */
 :root {
     /* Основные цвета */
-    --color-primary: #8b8f97;
+    --color-primary: #5a5d62;
     --color-secondary: #a9b3c1;
-    --color-dark: #4a4a4a;
+    --color-dark: #7a818b;
     --color-light: #fff;
     --color-gray: #f5f7fa;
-    --color-text: #8a95ab;
+    --color-text: #414347;
     --color-border: #e0e0e0;
     --color-background: #f8f8f8;
     --color-placeholder: #999;
-    
+       --color-kontakt: #fff;
     /* Цвета для теней */
     --shadow-color: rgba(0, 0, 0, 0.1);
     --shadow-color-hover: rgba(0, 0, 0, 0.2);
@@ -28,9 +28,45 @@
     --focus-shadow: rgba(218, 165, 32, 0.1);
     --button-shadow: rgba(218, 165, 32, 0.2);
     
-    /* Шрифты */
-    --font-primary: 'TTCommons', sans-serif;
+    /* Шрифты и типографика */
+    --font-primary: 'Montserrat','TTCommons', sans-serif;
     --font-secondary: 'Playfair Display', serif;
+    
+    /* Размеры шрифтов */
+    --font-size-xs: 0.8rem;
+    --font-size-sm: 0.9rem;
+    --font-size-base: 1rem;
+    --font-size-md: 1.1rem;
+    --font-size-lg: 1.2rem;
+    --font-size-xl: 2rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 2.5rem;
+    --font-size-4xl: 4rem;
+    
+    /* Жирность шрифта */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* Высота строки */
+    --line-height-tight: 0.6;
+    --line-height-base: 1.6;
+    --line-height-relaxed: 1;
+    
+    /* Межбуквенный интервал */
+    --letter-spacing-tight: -0.5px;
+    --letter-spacing-normal: 0px;
+    --letter-spacing-wide: 1px;
+}
+
+/* Подключение шрифтов */
+@font-face {
+    font-family: 'TTCommons';
+    src: url('fonts/TTCommons-Regular.woff2') format('woff2'),
+         url('fonts/TTCommons-Regular.woff') format('woff');
+    font-weight: var(--font-weight-normal);
+    font-style: normal;
 }
 
 /* Общие стили */
@@ -38,6 +74,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: var(--font-primary);
 }
 
 html {
@@ -46,22 +83,26 @@ html {
 
 body {
     font-family: var(--font-primary);
-    line-height: 1.6;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
     color: var(--color-text);
     background-color: var(--color-light);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2,  h4, h5, h6 {
     color: var(--color-dark);
+    line-height: var(--line-height-tight);
 }
 
 h1 {
-    font-size: 3.5rem;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
     text-shadow: 2px 2px 4px var(--shadow-color);
 }
 
 h2 {
-    font-size: 2.5rem;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-semibold);
     text-align: center;
     position: relative;
     padding-bottom: 1rem;
@@ -76,6 +117,17 @@ h2::after {
     width: 100px;
     height: 2px;
     background: var(--color-secondary);
+}
+
+h3 {
+    color: var(--color-kontakt);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+}
+
+h4 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
 }
 
 /* Шапка сайта */
@@ -142,21 +194,21 @@ nav {
 
 /* Главный баннер */
 .hero {
-    background: linear-gradient(var(--overlay-dark), var(--overlay-dark)),
-                url('church-background.jpg') center/cover;
-    color: var(--color-light);
+    background:                 url('church-background.jpg') center/cover;
+    color: var(--color-dark);
     text-align: center;
     padding: 200px 20px 100px;
     margin-top: 0;
 }
 
 .hero-content {
-    font-family: 'TTCommons', sans-serif;
+    font-family: var(--font-primary);
 }
 
 .hero p {
-    font-family: 'TTCommons', sans-serif;
-    font-size: 1.3rem;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-relaxed);
     margin-bottom: 2rem;
     max-width: 800px;
     margin: 0 auto 2rem;
@@ -223,15 +275,15 @@ section:nth-child(even) {
 .product-card h3 {
     color: var(--color-primary);
     margin: 0 0 10px 0;
-    font-size: 1.3em;
-    font-weight: 600;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
 }
 
 .product-card p {
     color: var(--color-text);
     margin: 0;
-    font-size: 0.95em;
-    line-height: 1.5;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-base);
     opacity: 0.9;
 }
 
@@ -273,7 +325,8 @@ section:nth-child(even) {
     padding: 1rem;
     border: 1px solid var(--color-border);
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: var(--font-size-base);
+    font-family: var(--font-primary);
     transition: border-color 0.3s ease;
 }
 
@@ -295,12 +348,12 @@ section:nth-child(even) {
     padding: 1rem 2.5rem;
     border: none;
     border-radius: 5px;
-    font-size: 1.1rem;
-    font-weight: bold;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: var(--letter-spacing-wide);
 }
 
 .cta-button:hover {
@@ -339,11 +392,11 @@ footer {
 /* Адаптивность */
 @media (max-width: 768px) {
     h1 {
-        font-size: 2.5rem;
+        font-size: var(--font-size-3xl);
     }
 
     h2 {
-        font-size: 2rem;
+        font-size: var(--font-size-2xl);
     }
 
     .menu {
@@ -356,6 +409,33 @@ footer {
 
     section {
         padding: 60px 20px;
+    }
+
+    .hero p {
+        font-size: var(--font-size-lg);
+    }
+    
+    .menu a {
+        font-size: var(--font-size-md);
+        font-weight: var(--font-weight-medium);
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: var(--font-size-sm);
+    }
+
+    h1 {
+        font-size: var(--font-size-2xl);
+    }
+
+    h2 {
+        font-size: var(--font-size-xl);
+    }
+    
+    .hero p {
+        font-size: var(--font-size-base);
     }
 }
 
@@ -374,14 +454,19 @@ a:hover {
 
 /* Стили для кнопок */
 .button,
-.submit-btn,
+
 .action-btn {
     background-color: var(--color-secondary);
     color: var(--color-light);
     border: none;
     transition: all 0.3s ease;
 }
-
+.submit-btn{
+    background-color: var(--color-secondary);
+    color:#fff;
+    border: none;
+    transition: all 0.3s ease;
+}
 .button:hover,
 .submit-btn:hover,
 .action-btn:hover {
