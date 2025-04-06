@@ -35,7 +35,7 @@
         </div>
 
         <div class="product-info">
-            <h1>{{ product.title }}</h1>
+
             {% if category %}
             <div class="category-info">
                 <a href="{{ url_for('category_products', id=category.id) }}" class="category-link">
@@ -83,10 +83,12 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
+        margin-top: 50px;
     }
     .product-header h1 {
         color: var(--color-primary);
         margin: 0;
+        font-size: var(--font-size-xl);
     }
     .back-btn {
         text-decoration: none;
@@ -128,6 +130,11 @@
         display: flex;
         flex-direction: column;
         gap: 20px;
+    }
+    .product-info h1 {
+        color: var(--color-primary);
+        margin: 0 0 10px 0;
+        font-size: var(--font-size-xl);
     }
     .description {
         font-size: 1.1em;

@@ -41,7 +41,7 @@
     --font-size-xl: 2rem;
     --font-size-2xl: 2rem;
     --font-size-3xl: 2.5rem;
-    --font-size-4xl: 4rem;
+    --font-size-4xl: 5rem;
     
     /* Жирность шрифта */
     --font-weight-normal: 400;
@@ -52,7 +52,7 @@
     /* Высота строки */
     --line-height-tight: 0.6;
     --line-height-base: 1.6;
-    --line-height-relaxed: 1;
+    --line-height-relaxed: 1.4;
     --line-height-relaxed-mobile: 2.2;
     --line-height-heading-mobile: 1.3;
     
