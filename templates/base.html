@@ -108,12 +108,14 @@
         }
         @media (max-width: 768px) {
             .social-links {
-                flex-direction: column;
+                flex-direction: row;
                 align-items: center;
+                justify-content: center;
+                gap: 15px;
             }
             .social-btn {
-                width: 50px;
-                height: 50px;
+                width: 40px;
+                height: 40px;
             }
         }
 
@@ -304,7 +306,8 @@
                 font-size: var(--font-size-base);
             }
             
-            .contact-text {color:#fff;
+            .contact-text {
+                color: #fff;
                 display: none;
             }
 
@@ -609,7 +612,8 @@
                 font-size: var(--font-size-base);
             }
 
-            .submit-btn {color:#fff
+            .submit-btn {
+                color: #fff;
                 font-size: var(--font-size-xs);
                 padding: 0.7rem 1.2rem;
             }

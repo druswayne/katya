@@ -10,7 +10,7 @@
     --color-border: #e0e0e0;
     --color-background: #f8f8f8;
     --color-placeholder: #999;
-       --color-kontakt: #fff;
+    --color-kontakt: #fff;
     /* Цвета для теней */
     --shadow-color: rgba(0, 0, 0, 0.1);
     --shadow-color-hover: rgba(0, 0, 0, 0.2);
@@ -29,7 +29,7 @@
     --button-shadow: rgba(218, 165, 32, 0.2);
     
     /* Шрифты и типографика */
-    --font-primary: 'Montserrat','TTCommons', sans-serif;
+    --font-primary: 'Montserrat', sans-serif;
     --font-secondary: 'Playfair Display', serif;
     
     /* Размеры шрифтов */
@@ -53,6 +53,8 @@
     --line-height-tight: 0.6;
     --line-height-base: 1.6;
     --line-height-relaxed: 1;
+    --line-height-relaxed-mobile: 2.2;
+    --line-height-heading-mobile: 1.3;
     
     /* Межбуквенный интервал */
     --letter-spacing-tight: -0.5px;
@@ -393,6 +395,7 @@ footer {
 @media (max-width: 768px) {
     h1 {
         font-size: var(--font-size-3xl);
+        line-height: var(--line-height-heading-mobile);
     }
 
     h2 {
@@ -407,12 +410,17 @@ footer {
         padding: 150px 20px 80px;
     }
 
+    .hero h1 {
+        line-height: var(--line-height-heading-mobile);
+    }
+
     section {
         padding: 60px 20px;
     }
 
     .hero p {
         font-size: var(--font-size-lg);
+        line-height: var(--line-height-relaxed-mobile);
     }
     
     .menu a {
@@ -428,14 +436,20 @@ footer {
 
     h1 {
         font-size: var(--font-size-2xl);
+        line-height: var(--line-height-heading-mobile);
     }
 
     h2 {
         font-size: var(--font-size-xl);
     }
     
+    .hero h1 {
+        line-height: var(--line-height-heading-mobile);
+    }
+    
     .hero p {
         font-size: var(--font-size-base);
+        line-height: var(--line-height-relaxed-mobile);
     }
 }
 
