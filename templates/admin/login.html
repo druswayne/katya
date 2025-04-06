@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход в административную панель</title>
+    <title>Панель администратора</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         .login-container {
@@ -48,7 +48,7 @@
 </head>
 <body>
     <div class="login-container">
-        <h2>Вход в административную панель</h2>
+        <h2>Панель администратора</h2>
         
         {% with messages = get_flashed_messages() %}
             {% if messages %}

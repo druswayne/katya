@@ -424,8 +424,8 @@ footer {
     }
     
     .menu a {
-        font-size: var(--font-size-md);
-        font-weight: var(--font-weight-medium);
+        text-align: center;
+        padding: 15px 10px;
     }
 }
 
