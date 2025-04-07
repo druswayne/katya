@@ -1,0 +1,213 @@
+/* Стили для десктопной навигации */
+.menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.menu li {
+    display: inline-block;
+    position: relative;
+}
+
+.menu a {
+    display: block;
+    padding: 0.6rem 1rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+    font-weight: var(--font-weight-medium);
+    position: relative;
+}
+
+.menu a:hover {
+    background: var(--color-secondary);
+    color: var(--color-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Добавляем линию под текстом через ::after */
+.menu a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: var(--color-secondary);
+    bottom: 23px; /* Увеличенное в полтора раза расстояние между текстом и линией (15px * 1.5) */
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.menu a:hover::after {
+    width: 70%;
+}
+
+/* Стили для мобильного меню */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-primary);
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-right {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: var(--color-light);
+        padding: 80px 20px 20px;
+        transition: right 0.3s ease;
+        z-index: 999;
+        overflow-y: auto;
+        box-shadow: -2px 0 10px var(--shadow-color);
+    }
+
+    .nav-right.active {
+        right: 0;
+    }
+
+    .menu {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 20px;
+        list-style: none;
+        padding: 0;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .menu li {
+        width: calc(50% - 5px);
+        text-align: center;
+        margin-bottom: 5px;
+        display: flex;
+    }
+
+    .menu a {
+        display: flex;
+        padding: 12px 10px;
+        font-size: var(--font-size-sm);
+        color: var(--color-primary);
+        text-decoration: none;
+        border: 2px solid var(--color-secondary);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        width: 100%;
+        box-sizing: border-box;
+        background: transparent;
+        font-weight: var(--font-weight-medium);
+        text-align: center;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.2;
+        min-height: 48px;
+    }
+
+    .menu-toggle.active {
+        position: fixed;
+        right: 20px;
+        top: 20px;
+    }
+
+    .menu-toggle.active span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+        background-color: var(--color-primary);
+    }
+
+    .menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.active span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+        background-color: var(--color-primary);
+    }
+
+    body.menu-open {
+        overflow: hidden;
+    }
+
+    /* Изменяем стиль линии after в мобильной версии */
+    .menu a::after {
+        bottom: 18px; /* Увеличенное в полтора раза расстояние (12px * 1.5) */
+        height: 1px;
+    }
+    
+    .menu a:hover::after {
+        width: 50%;
+    }
+
+    /* Стили для всех пунктов меню на мобильных */
+    .menu a:hover {
+        background: var(--color-secondary);
+        color: var(--color-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px var(--button-shadow);
+    }
+}
+
+@media (max-width: 480px) {
+    .menu li {
+        width: 100%; /* на очень маленьких экранах - по одному пункту в строке */
+    }
+    
+    .menu a {
+        padding: 10px 8px;
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* Стили для навигации на десктопе */
+@media (min-width: 769px) {
+    nav {
+        padding: 0 40px;
+        height: 70px;
+    }
+    
+    .menu {
+        justify-content: flex-end;
+    }
+}
+
+/* Общие стили навигации */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: relative;
+    background: #efeaea;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+} 

@@ -70,7 +70,7 @@
     font-weight: var(--font-weight-normal);
     font-style: normal;
 }
-
+.section-title{padding-bottom:2rem}
 /* Общие стили */
 * {
     margin: 0;

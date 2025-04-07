@@ -43,9 +43,9 @@
                 </a>
             </div>
             {% endif %}
-            <div class="price">{{ product.price }} ₽</div>
+
             <div class="description">{{ product.description }}</div>
-            <button class="order-btn" onclick="showOrderForm()">Заказать</button>
+            <button class="order-btn" onclick="showOrderForm()">Узнать подробнее</button>
         </div>
     </div>
 </div>
@@ -53,7 +53,7 @@
 <div id="orderModal" class="order-modal">
     <div class="order-modal-content">
         <button class="close-btn" onclick="hideOrderForm()">&times;</button>
-        <h2>Оформление заказа</h2>
+        <h2>Заполните форму для связи</h2>
         <form method="POST" action="{{ url_for('order_product', product_id=product.id) }}">
             <div class="form-group">
                 <input type="text" name="name" placeholder="Ваше имя" required>

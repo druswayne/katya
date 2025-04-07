@@ -11,14 +11,14 @@
 
 <!-- О нас -->
 <section id="about">
-    <h2 STYLE="FONT-FAMILY:--font-primary">О нашей мастерской</h2>
-    <p>Всем добрый день! Меня зовут Екатерина. Рада приветствовать Вас на страничке своей мастерской. Здесь вы можете сделать заказ на пошив иерейского или храмового облачения.</p>
+    <h2 STYLE="FONT-FAMILY:--font-primary"  class="section-title">О нашей мастерской</h2>
+    <p><br> добрый день! Меня зовут Екатерина. Рада приветствовать Вас на страничке своей мастерской. Здесь вы можете сделать заказ на пошив иерейского или храмового облачения.</p>
     <!-- Добавить информацию о мастерской -->
 </section>
 
 <!-- Наши изделия -->
 <section id="products">
-    <h2 STYLE="FONT-FAMILY:--font-primary">Категории</h2>
+    <h2 STYLE="FONT-FAMILY:--font-primary"  class="section-title">Категории</h2>
     <div class="products-grid">
         {% for category in categories %}
         <a href="{{ url_for('category_products', id=category.id) }}" class="product-card">
@@ -36,7 +36,7 @@
 
 <!-- Процесс работы -->
 <section id="process" class="section">
-    <h2 STYLE="FONT-FAMILY:--font-primary">Как мы работаем</h2>
+    <h2 STYLE="FONT-FAMILY:--font-primary"  class="section-title">Как мы работаем</h2>
     <div class="process-steps">
         <div class="step">
             <h3>1. Выберите товар</h3>
