@@ -93,6 +93,11 @@ def admin_login():
         flash('Неверное имя пользователя или пароль')
     return render_template('admin/login.html')
 
+
+@app.route('/yandex_a57c2503b7a84d82.html')
+def yandex():
+    return render_template('yandex_a57c2503b7a84d82.html')
+
 @app.route('/admin/logout')
 @login_required
 def admin_logout():
